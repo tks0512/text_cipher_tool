@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テキスト暗号化ツール</title>
+    <script>
+        const substitution = {
+            'あ': '.', 'い': '/', 'う': '@', 'え': ':', 'お': '1',
+            'か': 'a', 'き': 'b', 'く': 'c', 'け': '#', 'こ': '2', 
+            'さ': 'd', 'し': 'e', 'す': 'f', 'せ': '_', 'そ': '3', 
+            'た': 'g', 'ち': 'h', 'つ': 'r', 'て': '%', 'と': '4',
+            'な': 'j', 'に': 'k', 'ぬ': 'l', 'ね': '&', 'の': '5',
+            'は': 'm', 'ひ': 'n', 'ふ': 'o', 'へ': '=', 'ほ': '6',
+            'ま': 'p', 'み': 'q', 'む': 'r', 'め': 's', 'も': '7', 
+            'や': 't', 'ゆ': 'v', 'よ': '8', 
+            'ら': 'w', 'り': 'x', 'る': 'y', 'れ': 'z', 'ろ': '9', 
+            'わ': '-', 'を': '+', 'ん': '*', 'ー': '0', 
+            '゛': "'", '゜': '"',
+            '、': ',', '？': '?', '！': '!', 
+            'が': 'A', 'ぎ': 'B', 'ぐ': 'C', 
+            'ざ': 'D', 'じ': 'E', 'ず': 'F',
+            'だ': 'G', 'ぢ': 'H', 'づ': 'R',
+            'は': 'M', 'び': 'N', 'ぶ': 'O',
+            'ゃ': 'T', 'ゅ': 'V',
+        };
+
+        const reverseSubstitution = Object.fromEntries(
+            Object.entries(substitution).map(([key, value]) => [value, key])
+        );
+
+        function encryptText() {
+            let inputText = document.getElementById("inputText").value;
+            let encryptedText = inputText.split('').map(char => substitution[char] || char).join('');
+            document.getElementById("outputText").innerText = encryptedText;
+        }
+
+        function decryptText() {
+            let inputText = document.getElementById("inputText").value;
+            let decryptedText = inputText.split('').map(char => reverseSubstitution[char] || char).join('');
+            document.getElementById("outputText").innerText = decryptedText;
+        }
+
+        function copyToClipboard() {
+            const outputText = document.getElementById("outputText").innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = outputText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('コピーしました！');
+        }
+    </script>
+</head>
+<body>
+    <h2>テキスト暗号化ツール</h2>
+    <textarea id="inputText" rows="5" cols="50" placeholder="ここにテキストを入力"></textarea>
+    <br>
+    <button onclick="encryptText()" style="width: 150px; height: 30px;">暗号化</button>
+    <button onclick="decryptText()" style="width: 150px; height: 30px;">復号化</button>
+    <h3>結果:</h3>
+    <p id="outputText" style="white-space: pre-wrap; font-weight: bold;"></p>
+    <button onclick="copyToClipboard()" style="width: 150px; height: 30px;">結果をコピー</button>
+</body>
+</html>
